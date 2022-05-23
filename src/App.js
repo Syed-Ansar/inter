@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+
+import { useState,useEffect } from 'react';
+import Card from './components/Card';
 
 function App() {
+
+  const [data,setData] = useState([]);
+
+const fetchData = async() => {
+    let url = "https://randomuser.me/api/?results=5";
+    const fetch1 = await fetch(url);
+    const res = await fetch1.json();
+    setData(res.results);
+  }
+
+    useEffect(() => {
+     fetchData();
+    },[])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Javascript</h1>
+
+     {data.map((item,index) => {
+       const gender = item.gender;
+       const {title,first,last} = item.name;
+       const name = `${title} ${first} ${last}`;
+       const {thumbnail} = item.picture;
+       return(
+         <div style={{display:'flex',flexDirection:'row'}}>
+           <Card key={index} name = {name} gender={gender} thumbnail={thumbnail}/>
+         </div>
+       )
+     })}
     </div>
   );
 }
